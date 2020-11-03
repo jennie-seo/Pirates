@@ -39,11 +39,63 @@ public class PiratesStep1 {
 		frame.setResizable (false);
 
 		// The panel that will hold the components in the frame.
-		JPanel contentPane = new JPanel ();
-
-		// TODO: Add the components to the view
+		JPanel contentPane = new JPanel();
+		contentPane.setPreferredSize(new Dimension(950, 400));
+		contentPane.setLayout(new BorderLayout());
+	
+		// Create the right action panel
+		JPanel rightPanel = new JPanel();
+		contentPane.add(rightPanel, BorderLayout.EAST);
+		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.PAGE_AXIS));
 		
+		// Add the score labels
+		JLabel scoreTitleLabel = new JLabel("Score");
+		rightPanel.add(scoreTitleLabel);
+		scoreTitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		JLabel scoreNumberLabel = new JLabel("0");
+		rightPanel.add(scoreNumberLabel);
+		scoreNumberLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		// Add the action labels
+		JLabel actionsTitleLabel = new JLabel("Actions");
+		rightPanel.add(actionsTitleLabel);
+		actionsTitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		// Add New Game button
+		JButton newGameButton = new JButton("New Game");
+		rightPanel.add(newGameButton);
+		newGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+		// Add Music button
+		JButton musicButton = new JButton("Music Off");
+		rightPanel.add(musicButton);
+		musicButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		// Add quit button
+		JButton quitButton = new JButton("Quit");
+		rightPanel.add(quitButton);
+		quitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		// Add map
+		JLayeredPane gamePanel = new JLayeredPane();
+		contentPane.add(gamePanel);
+		
+		JLabel mapImage = new JLabel(new ImageIcon("resources/world-map-animals.jpg"));
+		gamePanel.add(mapImage);
+		mapImage.setSize(775, 400);
+		
+		// Add the pirate ship
+		JLabel shipImage = createScaledImage("resources/pirate-ship.png", 40, 40);
+		shipImage.setSize(40, 40);
+		gamePanel.add(shipImage, Integer.valueOf(100));
+		
+		// Put the ship at a random location
+		Random randomGenerator = new Random();
+		int pirateX = randomGenerator.nextInt(735);
+		int pirateY = randomGenerator.nextInt(360);
+		shipImage.setLocation(pirateX, pirateY);
+		
 		// Add the panel to the frame
 		frame.setContentPane(contentPane);
 
