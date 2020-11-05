@@ -26,6 +26,18 @@ public class PiratesStep2 {
 	 * multiple methods.
 	 */
 
+	// pirate ship image
+	static JLabel pirateShip; 
+
+	// score label 
+	static int score = 0;
+	static JLabel scoreLabel;
+	
+	// speed 
+	static int speed = 2000;
+	
+	// move timer
+	static Timer MoveTimer;
 
 	/**
 	 * CREATE MAIN WINDOW
@@ -58,7 +70,7 @@ public class PiratesStep2 {
 		sideBar.add(Box.createRigidArea(new Dimension(135, 10)));
 
 		// Make the score label
-		JLabel scoreLabel = new JLabel("0");
+		scoreLabel = new JLabel("0");
 		scoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		sideBar.add(scoreLabel);
 
@@ -78,6 +90,7 @@ public class PiratesStep2 {
 		newGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		sideBar.add(newGameButton);
 		sideBar.add(Box.createRigidArea(new Dimension(135, 10)));
+		newGameButton.addActionListener(new NewGameListener());
 
 		JButton musicButton = new JButton("Music Off");
 		musicButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -100,13 +113,15 @@ public class PiratesStep2 {
 		mapImage.setLocation(0, 0);
 
 		// Create the pirate ship
-		JLabel pirateShip = createScaledImage("resources/pirate-ship.png", 40, 40);
+		pirateShip = createScaledImage("resources/pirate-ship.png", 40, 40);
 		pirateShip.setSize(40, 40);
-		Random randomGenerator = new Random();
-		int pirateX = randomGenerator.nextInt(735);
-		int pirateY = randomGenerator.nextInt(360);
-		pirateShip.setLocation(pirateX, pirateY);
+		MoveShip();
 		mapPanel.add(pirateShip);
+		
+		// Create a timer that moves the pirate ship
+		MoveTimer = new Timer(2000, new MoveShipHandler());
+		MoveTimer.start();
+		
 
 		// Add the panel to the frame
 		frame.setContentPane(contentPane);
@@ -122,6 +137,15 @@ public class PiratesStep2 {
 	 * HELPER METHODS
 	 * Methods that you create to manage repetitive tasks.
 	 */
+	
+	/** Randomly change the ship's location. */
+	private static void MoveShip() {
+		Random randomGenerator = new Random();
+		int pirateX = randomGenerator.nextInt(735);
+		int pirateY = randomGenerator.nextInt(360);
+		pirateShip.setLocation(pirateX, pirateY);
+		pirateShip.setVisible(true);
+	}
 
 	/** Creates an image label scaled to the given size. */
 	private static JLabel createScaledImage (String filename, int width, int height) {
@@ -147,6 +171,59 @@ public class PiratesStep2 {
 			}
 		}
 	}
+
+	/** This listens for mouse interactions with the pirate ship */
+	private static class ShipMouseHandler implements MouseListener {
+		public void mouseClicked (MouseEvent event) {
+			// Score up by one
+			score++;
+			scoreLabel.setText(String.valueOf(score));
+			// Ship disappear
+		
+			// Make the speed faster
+			speed -= 50;
+			MoveTimer.setDelay(speed);
+			
+			pirateShip.setVisible(false);
+		}
+
+		public void mousePressed (MouseEvent event) {
+		}
+		public void mouseReleased (MouseEvent event) {
+		}
+		public void mouseEntered (MouseEvent event) {
+		}
+		public void mouseExited (MouseEvent event) {
+		}
+
+
+	}
+
+	/** Handles when the user clicks the new game button */
+	private static class NewGameListener implements ActionListener {
+		public void actionPerformed (ActionEvent event) {
+			// set the score to zero
+			score = 0;
+			scoreLabel.setText("0");
+			// move the ship to a new location
+			MoveShip();
+			pirateShip.addMouseListener(new ShipMouseHandler());
+			pirateShip.setVisible(true);
+			
+			speed = 2000;
+			MoveTimer.setDelay(2000);
+
+		}
+
+	}
 	
-	
+	 /** Moves the pirate ship everytime the time expires */
+    private static class MoveShipHandler implements ActionListener {
+        public void actionPerformed (ActionEvent event) {
+        	MoveShip();
+
+        }
+
+    }
+    
 }
